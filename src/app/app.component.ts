@@ -9,5 +9,5 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'opti-card-app';
+  title = 'Welcome to Optim Card Choice App 🎉';
 }
