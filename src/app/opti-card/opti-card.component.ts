@@ -1,26 +1,66 @@
 import { Component, OnInit } from '@angular/core';
-import { RowComponent } from "./row/row.component";
 import { CommonModule } from '@angular/common';
-
+import { FormBuilder,
+  FormArray,
+  Validators,
+  ReactiveFormsModule
+} from '@angular/forms';
 @Component({
     selector: 'app-opti-card',
     standalone: true,
     templateUrl: './opti-card.component.html',
     styleUrl: './opti-card.component.scss',
-    imports: [RowComponent, CommonModule]
+    imports: [ReactiveFormsModule, CommonModule]
 })
+
+
 export class OptiCardComponent implements OnInit{
 
+  categorySpendForm = this.formBuilder.group({
+    drugStore: [],
+    entertainment: [],
+    furniture: [],
+    gas: [],
+    groceries: [],
+    homeImprovement: [],
+    hotelMotel: [],
+    parkingPublicTransitRides: [],
+    recurringBills: [],
+    restaurantsDining: [],
+    streamingDigitalSubscriptions: [],
+    travel: [],
+    other: [],
+    moreCategories:
+    this.formBuilder.array([this.formBuilder.control('')]),
+  });
+
+  get moreCategories() {
+    return this.categorySpendForm.get('moreCategories') as FormArray;
+  }
+
+  addCategory() {
+    this.moreCategories.push(this.formBuilder.control(''));
+  }
+
+  onSubmit() {
+    console.warn(this.categorySpendForm.value)
+  }
+
   ngOnInit(): void {
-    this._categories = [
-      'Grocery',
+    this._categories = [     
+      'Drug Store',     
+      'Entertainment',
+      'Furniture',
       'Gas',
-      'Restaurant',
-      'Recreation',
+      'Groceries',
+      'Home Improvement',
+      'Hotel/Motel',
+      'Parking/Public Transit/Rides',  
+      'Recurring Bills',
+      'Restaurants/Dining',
+      'Streaming/Digital Subscriptions',
       'Travel',
-      'Property Tax',
-      'Home and Car Insurance',
-      'Gift'
+      'Other',
     ]
   }
   private _categories: Array<string> = [];
@@ -28,6 +68,8 @@ export class OptiCardComponent implements OnInit{
   public get categories() {
     return this._categories;
   }
+
+  constructor(private formBuilder: FormBuilder) {}
 
 
 }

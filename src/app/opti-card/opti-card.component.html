@@ -1,9 +1,92 @@
 <h1>
-Consumer Category and Spend Rows
+    Consumer Category and Spend Froms
+</h1>
+
+<form [formGroup]="categorySpendForm" (ngSubmit)="onSubmit()">
+
+    <label for="drug-store">Drug Store: </label>
+    <input id="drug-store" type="number" formControlName="drugStore">
+
+    <label for="entertainment">Entertainment: </label>
+    <input id="entertainment" type="number" formControlName="entertainment">
+
+    <label for="furniture">Furniture: </label>
+    <input id="furniture" type="number" formControlName="furniture">
+
+    <label for="gas">Gas: </label>
+    <input id="gas" type="number" formControlName="gas">
+
+    <label for="groceries">Groceries: </label>
+    <input id="groceries" type="number" formControlName="groceries">
+
+    <label for="home-improvement">Home Improvement: </label>
+    <input id="home-improvement" type="number" formControlName="homeImprovement">
+
+    <label for="hotel-motel">Hotel/Motel: </label>
+    <input id="hotel-motel" type="number" formControlName="hotelMotel">
+
+    <label for="parking-public-transit-rides">Parking/Public Transit/Rides: </label>
+    <input id="parking-public-transit-rides" type="number" formControlName="parkingPublicTransitRides">
+
+    <label for="recurring-bills">Recurring Bills: </label>
+    <input id="recurring-bills" type="number" formControlName="recurringBills">
+
+    <label for="restaurants-dining">Restaurants/Dining: </label>
+    <input id="restaurants-dining" type="number" formControlName="restaurantsDining">
+
+    <label for="streaming-digital-subscriptions">Streaming/Digital Subscriptions: </label>
+    <input id="rstreaming-digital-subscriptions" type="number" formControlName="streamingDigitalSubscriptions">
+
+    <label for="travel">Travel: </label>
+    <input id="travel" type="number" formControlName="travel">
+
+    <label for="other">Other: </label>
+    <input id="other" type="number" formControlName="restaurantsDining">
+
+    <div formArrayName="moreCategories">
+        <h2>More Categories</h2>
+        <button type="button" (click)="addCategory()">
+            + Add another category
+        </button>
+
+        <div *ngFor="let moreCategory of moreCategories.controls;
+        let i=index">
+        <!-- The repeated more categories template -->
+        <label for="more-category-{{i}}">More Category {{i + 1}}:</label>
+        <input id="more-category-{{i}}" type="number" [formControlName]="i">
+        </div>
+    </div>
+
+
+
+    <p>Complete the form to enable button.</p>
+    <button type="submit" [disabled]="!categorySpendForm.valid">Submit</button>
+
+</form>
+
+
+
+
+
+
+
+
+
+<!-- 
+<div *ngFor="let category of categories; index as i; trackByFunction: i">
+    <label for="{{category.label}}"> {{category.name}}: </label>
+    <input id="{{category.label}}" type="text" formControlName="{{category.camelName}}">
+</div> -->
+
+
+<!-- <h1>
+    Consumer Category and Spend Rows
 </h1>
 <div  class="grid-container">
     <div *ngFor="let category of categories; index as i; trackByFunction: i">
         <app-row [category]="category"></app-row>
     </div>
-</div>
+</div> -->
+
+
 
