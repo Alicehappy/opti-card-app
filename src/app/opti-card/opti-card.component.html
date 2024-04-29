@@ -2,14 +2,13 @@
     Consumer Category and Spend Froms
 </h1>
 
-<form [formGroup]="categorySpendForm" (ngSubmit)="onSubmit()">
-
+<form class="category-spend-form" [formGroup]="categorySpendForm" (ngSubmit)="onSubmit()">
     <label for="drug-store">Drug Store: </label>
     <input id="drug-store" type="number" formControlName="drugStore">
-
+    
     <label for="entertainment">Entertainment: </label>
-    <input id="entertainment" type="number" formControlName="entertainment">
-
+    <input id="entertainment" type="number" formControlName="entertainment">    
+    
     <label for="furniture">Furniture: </label>
     <input id="furniture" type="number" formControlName="furniture">
 
