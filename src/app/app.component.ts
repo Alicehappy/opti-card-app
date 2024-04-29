@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -10,4 +10,10 @@ import { RouterOutlet } from '@angular/router';
 })
 export class AppComponent {
   title = 'Welcome to Optim Card Choice App 🎉';
+
+  onClick() {
+    this.router.navigate(['/opti-card']);
+  }
+
+  constructor (private readonly router: Router) {}
 }
