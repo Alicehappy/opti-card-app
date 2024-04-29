@@ -43,25 +43,23 @@
     <label for="other">Other: </label>
     <input id="other" type="number" formControlName="restaurantsDining">
 
-    <div formArrayName="moreCategories">
-        <h2>More Categories</h2>
-        <button type="button" (click)="addCategory()">
-            + Add another category
-        </button>
-
-        <div *ngFor="let moreCategory of moreCategories.controls;
-        let i=index">
-        <!-- The repeated more categories template -->
-        <label for="more-category-{{i}}">More Category {{i + 1}}:</label>
-        <input id="more-category-{{i}}" type="number" [formControlName]="i">
-        </div>
-    </div>
-
-
-
     <p>Complete the form to enable button.</p>
     <button type="submit" [disabled]="!categorySpendForm.valid">Submit</button>
 
 </form>
 
 
+
+<!-- 
+<div formArrayName="moreCategories">
+    <h2>More Categories</h2>
+    <button type="button" (click)="addCategory()">
+        + Add another category
+    </button>
+
+    <div *ngFor="let moreCategory of moreCategories.controls;
+    let i=index">
+    <label for="more-category-{{i}}">More Category {{i + 1}}:</label>
+    <input id="more-category-{{i}}" type="number" [formControlName]="i">
+    </div>
+</div> -->
