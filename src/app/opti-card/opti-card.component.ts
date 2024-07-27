@@ -1,13 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder,
-  FormArray,
-  Validators,
   ReactiveFormsModule,
   FormGroup,
-  FormControl
 } from '@angular/forms';
 import { Category } from './category.interface';
+import {HttpClient} from '@angular/common/http';
 
 
 @Component({
@@ -24,7 +22,11 @@ export class OptiCardComponent implements OnInit{
   public categorySpendForm: FormGroup = this.formBuilder.group({});
 
   private _categories: Array<string> = [];
-
+  
+  private cardsData: any = '';
+  private http = inject(HttpClient);
+  post: any;
+  
   ngOnInit(): void {
     this._categories = [     
       'Drug Store',     
@@ -43,7 +45,6 @@ export class OptiCardComponent implements OnInit{
     ];
 
     this.categorySpendForm = this.formBuilder.group(this.formGroupConfig);
-
   }
   
 
@@ -85,7 +86,16 @@ export class OptiCardComponent implements OnInit{
   }
 
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    ) {
+      this.http.get('http://poto-tomato:3000/api/data')
+                .subscribe(data => {
+                  this.post = data;
+                  console.log("opti card component data");
+                  console.log(this.post);
+                })
+    }
 
 
 }
