@@ -39,19 +39,19 @@ export class OptiCardComponent implements OnInit{
   
   ngOnInit(): void {
     this._categories = [     
-      'Drug Store',     
-      'Entertainment',
-      'Furniture',
-      'Gas',
-      'Groceries',
-      'Home Improvement',
-      'Hotel/Motel',
-      'Parking/Public Transit/Rides',  
-      'Recurring Bills',
-      'Restaurants/Dining',
-      'Streaming/Digital Subscriptions',
-      'Travel',
-      'Other',
+      'drugStore',     
+      'entertainment',
+      'furniture',
+      'gas',
+      'groceries',
+      'homeImprovement',
+      'hotel',
+      'parking',  
+      'recurringBills',
+      'restaurants',
+      'streaming',
+      'travel',
+      'other',
     ];
 
     this.categorySpendForm = this.formBuilder.group(this.formGroupConfig);
@@ -67,28 +67,28 @@ export class OptiCardComponent implements OnInit{
 
   onSubmit() {
     console.warn(this.categorySpendForm.value)
+    console.log(this.categorySpendForm.controls['drugStore'].value);
+
     this.calculateRewards();
   }
 
 
   public get categories() {
 
-    let categoriesData: Array<Category> = [];
+    let categoriesArr: Array<Category> = [];
     
     for(let i = 0; i < this._categories.length; i++) {
-      let allCapWord = this._categories[i].replace(/[\/ ]/g, '-');
-      let capFirstLetter = allCapWord[0].toLowerCase();
-      let restOfWord = allCapWord.slice(1);
+     
 
-      categoriesData.push({
-        label: this._categories[i].replace(/[\/ ]/g, '-').toLowerCase(),
-        id: this._categories[i].replace(/[\/ ]/g, '-').toLowerCase(),
-        description: this._categories[i] + ': ',
-        controlName: capFirstLetter + restOfWord,
+      categoriesArr.push({
+        label: this._categories[i],
+        id: this._categories[i],
+        description: this._categories[i],
+        controlName: this._categories[i],
       })
     }
 
-    return categoriesData;
+    return categoriesArr;
   }
 
   private get formGroupConfig() {
@@ -114,31 +114,30 @@ export class OptiCardComponent implements OnInit{
     console.log(this.post.cards.length);
  
     for(let i = 0; i < this.post.cards.length; i++) {
-      let rewardValue = this.post.cards[i]['Drug Store']*0.01*this.categorySpendForm.controls['drug-Store'].value
-      +this.post.cards[i]['Entertainment']*0.01*this.categorySpendForm.controls['entertainment'].value
-      +this.post.cards[i]['Furniture']*0.01*this.categorySpendForm.controls['furniture'].value
-      +this.post.cards[i]['Gas']*0.01*this.categorySpendForm.controls['gas'].value
-      +this.post.cards[i]['Groceries']*0.01*this.categorySpendForm.controls['groceries'].value
-      +this.post.cards[i]['Home Improvement']*0.01*this.categorySpendForm.controls['home-Improvement'].value
-      +this.post.cards[i]['Hotel/Motel']*0.01*this.categorySpendForm.controls['hotel-Motel'].value
-      +this.post.cards[i]['Other']*0.01*this.categorySpendForm.controls['other'].value
-      +this.post.cards[i]['Parking/Public Transit/Rides']*0.01*this.categorySpendForm.controls['parking-Public-Transit-Rides'].value
-      +this.post.cards[i]['Recurring Bills']*0.01*this.categorySpendForm.controls['recurring-Bills'].value
-      +this.post.cards[i]['Restaurants/Dining']*0.01*this.categorySpendForm.controls['restaurants-Dining'].value
-      +this.post.cards[i]['Streaming/Digital Subscriptions']*0.01*this.categorySpendForm.controls['streaming-Digital-Subscriptions'].value
-      +this.post.cards[i]['Supplementary Card Fee']*0.01*this.categorySpendForm.controls['streaming-Digital-Subscriptions'].value
-      +this.post.cards[i]['Travel']*0.01*this.categorySpendForm.controls['travel'].value
-      -this.post.cards[i]['Annual Fee'];
+      let rewardValue = this.post.cards[i]['drugStore']*0.01*this.categorySpendForm.controls['drugStore'].value
+      +this.post.cards[i]['entertainment']*0.01*this.categorySpendForm.controls['entertainment'].value
+      +this.post.cards[i]['furniture']*0.01*this.categorySpendForm.controls['furniture'].value
+      +this.post.cards[i]['gas']*0.01*this.categorySpendForm.controls['gas'].value
+      +this.post.cards[i]['groceries']*0.01*this.categorySpendForm.controls['groceries'].value
+      +this.post.cards[i]['homeImprovement']*0.01*this.categorySpendForm.controls['homeImprovement'].value
+      +this.post.cards[i]['hotel']*0.01*this.categorySpendForm.controls['hotel'].value
+      +this.post.cards[i]['other']*0.01*this.categorySpendForm.controls['other'].value
+      +this.post.cards[i]['parking']*0.01*this.categorySpendForm.controls['parking'].value
+      +this.post.cards[i]['recurringBills']*0.01*this.categorySpendForm.controls['recurringBills'].value
+      +this.post.cards[i]['restaurants']*0.01*this.categorySpendForm.controls['restaurants'].value
+      +this.post.cards[i]['streaming']*0.01*this.categorySpendForm.controls['streaming'].value
+      +this.post.cards[i]['travel']*0.01*this.categorySpendForm.controls['travel'].value
+      -this.post.cards[i]['annualFee'];
 
       console.log("count: " + i);
       console.log(rewardValue);
 
       let rewardObj = {
-        cardName: this.post.cards[i]['Name'],
+        cardName: this.post.cards[i]['name'],
         rewardValue: rewardValue
       }
 
-      this.rewards.push(rewardObj);
+      this.rewards.push(rewardObj);``
       
     }
 
