@@ -1,4 +1,4 @@
-enum CategoryDescription {
+export enum CategoryDescription {
     DrugStore = 'Drug Store',
     Entertainment = 'Entertainment',
     Furniture = 'Furniture',

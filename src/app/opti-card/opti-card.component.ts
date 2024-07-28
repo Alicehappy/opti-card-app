@@ -6,6 +6,7 @@ import { FormBuilder,
 } from '@angular/forms';
 import { Category } from './category.interface';
 import {HttpClient} from '@angular/common/http';
+import {CategoryDescription} from './card-description.enum';
 
 
 
@@ -28,9 +29,7 @@ export interface RewardObj {
 export class OptiCardComponent implements OnInit{
 
   public categorySpendForm: FormGroup = this.formBuilder.group({});
-
   private _categories: Array<string> = [];
-  
   public rewards: Array<RewardObj> = [];
   public bestCard: RewardObj = {cardName: '', rewardValue: 0};
 
@@ -58,34 +57,50 @@ export class OptiCardComponent implements OnInit{
     this.http.get('http://poto-tomato:3000/api/data')
                 .subscribe(data => {
                   this.post = data;
-                  console.log("opti card component data");
-                  console.log(this.post);
                   this.calculateRewards();
                 })
   }
   
-
   onSubmit() {
-    console.warn(this.categorySpendForm.value)
-    console.log(this.categorySpendForm.controls['drugStore'].value);
-
     this.calculateRewards();
   }
-
 
   public get categories() {
 
     let categoriesArr: Array<Category> = [];
     
     for(let i = 0; i < this._categories.length; i++) {
-     
 
-      categoriesArr.push({
+
+      let upperDesp = this._categories[i].charAt(0).toUpperCase()
+      + this._categories[i].slice(1);
+
+      let categoryObj = {
         label: this._categories[i],
         id: this._categories[i],
-        description: this._categories[i],
+        description: upperDesp.split(/(?=[A-Z])/).join(" "),
         controlName: this._categories[i],
-      })
+      }
+
+      if(this._categories[i]==='hotel') {
+        categoryObj.description = CategoryDescription.Hotel;
+      }
+
+      if(this._categories[i]==='parking') {
+        categoryObj.description = CategoryDescription.Parking;
+      }
+
+      if(this._categories[i]==='restaurants') {
+        categoryObj.description = CategoryDescription.Restaurants;
+      }
+
+      if(this._categories[i]==='streaming') {
+        categoryObj.description = CategoryDescription.Streaming;
+      }
+
+
+     
+      categoriesArr.push(categoryObj);
     }
 
     return categoriesArr;
