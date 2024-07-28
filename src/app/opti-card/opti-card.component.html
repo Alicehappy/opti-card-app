@@ -9,5 +9,19 @@
     </ng-container>
     <p>Complete the form to enable button.</p>
     <button type="submit">Submit</button>
-
 </form>
+
+<section>
+    <h2>Reward results for each card: </h2>
+    <ul>
+        @for (reward of rewards; track reward.cardName) {
+            <li>{{reward.cardName + ": " + reward.rewardValue}}</li>
+        }        
+    </ul>
+</section>
+
+<section>
+    <h2>The best card suggested: {{bestCard.cardName}}</h2>
+    <h2>Reward for the best card suggested: {{bestCard.rewardValue}}</h2>
+</section>
+
