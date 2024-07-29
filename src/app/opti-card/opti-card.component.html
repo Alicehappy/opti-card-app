@@ -2,13 +2,11 @@
     Consumer Category and Spend Froms
 </h1>
 
-<form class="category-spend-form" [formGroup]="categorySpendForm" (ngSubmit)="onSubmit()">
+<form class="category-spend-form" [formGroup]="categorySpendForm">
     <ng-container *ngFor="let category of categories">
         <label for="{{category.label}}">{{category.description}} </label>
         <input id="{{category.id}}" type="number" formControlName="{{category.controlName}}">
     </ng-container>
-    <p>Complete the form to enable button.</p>
-    <button type="submit">Submit</button>
 </form>
 
 <section>
