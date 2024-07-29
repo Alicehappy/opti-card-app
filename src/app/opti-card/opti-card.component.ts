@@ -56,88 +56,85 @@ export class OptiCardComponent implements OnInit{
     ];
 
     this.categorySpendForm = this.formBuilder.group(this.formGroupConfig);
-    this.http.get('http://poto-tomato:3000/api/data')
-                .subscribe(data => {
-                  this.post = data;
 
+    this.categorySpendForm.valueChanges.pipe(
+      debounceTime(300)
+    ).subscribe(values => {
+    
+      this.rewards = [];
+      let rewardValue = 0;
+      
 
-                  this.categorySpendForm.valueChanges.pipe(
-                    debounceTime(300)
-                  ).subscribe(values => {
-                  
-                    this.rewards = [];
-                    let rewardValue = 0;
-                    
-              
-                    for(let i = 0; i < this.post.cards.length; i++) {
-                      
-                      //Tangerine Money-Back MC will only give highest 3 categories 2% rewards, the rest categories are 0.5%
-                      if(this.post.cards[i]['name'] == CardName.TangerineMoneyBackMC || CardName.TangerineWorldMC) {
-                
-                         console.log('tangerine categories value');
-                        //  console.log(this.categorySpendForm.value);
-                
-                         let objToSort = values;
-                         let sortable: any[] = [];
-                
-                         for (let obj in objToSort) {
-                          sortable.push([obj, objToSort[obj]]);
-                         }
-                
-                         sortable.sort(function(a, b) {
-                          return b[1] - a[1];
-                         });
+      for(let i = 0; i < this.post.cards.length; i++) {
+        
+        //Tangerine Money-Back MC will only give highest 3 categories 2% rewards, the rest categories are 0.5%
+        if(this.post.cards[i]['name'] == CardName.TangerineMoneyBackMC || CardName.TangerineWorldMC) {
+  
+           console.log('tangerine categories value');
+          //  console.log(this.categorySpendForm.value);
+  
+           let objToSort = values;
+           let sortable: any[] = [];
+  
+           for (let obj in objToSort) {
+            sortable.push([obj, objToSort[obj]]);
+           }
+  
+           sortable.sort(function(a, b) {
+            return b[1] - a[1];
+           });
 
-                        for(let i = 0; i < sortable.length; i++) {
-                          if(i <= 2) {
-                            rewardValue += sortable[i][1]*0.02;
-                          } else {
-                            rewardValue += sortable[i][1]*0.005;
-                          }
-                        }
-                
-                        
-                         console.log(rewardValue);
-                    
-                
-                      } 
-                
-                      // TODO: Many cards first $2500 in groceries give 4%, the rest if other, eg. 1%
+          for(let i = 0; i < sortable.length; i++) {
+            if(i <= 2) {
+              rewardValue += sortable[i][1]*0.02;
+            } else {
+              rewardValue += sortable[i][1]*0.005;
+            }
+          }
+  
+          
+           console.log(rewardValue);
+      
+  
+        } 
+  
+        // TODO: Many cards first $2500 in groceries give 4%, the rest if other, eg. 1%
 
-                      else {
+        else {
 
-                            rewardValue = this.post.cards[i]['drugStore']*0.01*values['drugStore']
-                          +this.post.cards[i]['entertainment']*0.01*values['entertainment']
-                          +this.post.cards[i]['furniture']*0.01*values['furniture']
-                          +this.post.cards[i]['gas']*0.01*values['gas']
-                          +this.post.cards[i]['groceries']*0.01*values['groceries']
-                          +this.post.cards[i]['homeImprovement']*0.01*values['homeImprovement']
-                          +this.post.cards[i]['hotel']*0.01*values['hotel']
-                          +this.post.cards[i]['other']*0.01*values['other']
-                          +this.post.cards[i]['parking']*0.01*values['parking']
-                          +this.post.cards[i]['recurringBills']*0.01*values['recurringBills']
-                          +this.post.cards[i]['restaurants']*0.01*values['restaurants']
-                          +this.post.cards[i]['streaming']*0.01*values['streaming']
-                          +this.post.cards[i]['travel']*0.01*values['travel']
-                          -this.post.cards[i]['annualFee'];
+              rewardValue = this.post.cards[i]['drugStore']*0.01*values['drugStore']
+            +this.post.cards[i]['entertainment']*0.01*values['entertainment']
+            +this.post.cards[i]['furniture']*0.01*values['furniture']
+            +this.post.cards[i]['gas']*0.01*values['gas']
+            +this.post.cards[i]['groceries']*0.01*values['groceries']
+            +this.post.cards[i]['homeImprovement']*0.01*values['homeImprovement']
+            +this.post.cards[i]['hotel']*0.01*values['hotel']
+            +this.post.cards[i]['other']*0.01*values['other']
+            +this.post.cards[i]['parking']*0.01*values['parking']
+            +this.post.cards[i]['recurringBills']*0.01*values['recurringBills']
+            +this.post.cards[i]['restaurants']*0.01*values['restaurants']
+            +this.post.cards[i]['streaming']*0.01*values['streaming']
+            +this.post.cards[i]['travel']*0.01*values['travel']
+            -this.post.cards[i]['annualFee'];
 
-                      }
-                      
-                      let rewardObj = {
-                        cardName: this.post.cards[i]['name'],
-                        rewardValue: rewardValue
-                      }
-                
-                      this.rewards.push(rewardObj);
-                      
-                    }
-                
-                    this.bestCard = this.rewards.reduce((max, item) => item.rewardValue > max.rewardValue ? item : max, this.rewards[0]);
-                  
-                    return this.rewards;
-                    
-                  })
-                })
+        }
+        
+        let rewardObj = {
+          cardName: this.post.cards[i]['name'],
+          rewardValue: rewardValue
+        }
+  
+        this.rewards.push(rewardObj);
+        
+      }
+  
+      this.bestCard = this.rewards.reduce((max, item) => item.rewardValue > max.rewardValue ? item : max, this.rewards[0]);
+    
+      return this.rewards;
+      
+    })
+
+    
   }
 
   public get categories() {
@@ -154,7 +151,7 @@ export class OptiCardComponent implements OnInit{
         label: this._categories[i],
         id: this._categories[i],
         description: upperDesp.split(/(?=[A-Z])/).join(" "),
-        controlName: this._categories[i] + "control",
+        controlName: this._categories[i],
       }
 
       if(this._categories[i]==='hotel') {
@@ -197,8 +194,14 @@ export class OptiCardComponent implements OnInit{
   constructor(
     private formBuilder: FormBuilder,
     ) {
+    
+      this.http.get('http://poto-tomato:3000/api/data')
+                  .subscribe(data => {
+                    this.post = data;
+                  })
       
     }
+
 
 
 }
