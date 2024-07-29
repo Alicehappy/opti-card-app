@@ -1,27 +1,28 @@
-<h1>
-    Consumer Category and Spend Froms
-</h1>
+<h1>Consumer Category and Spend Froms</h1>
 
 <form class="category-spend-form" [formGroup]="categorySpendForm">
-    <ng-container>
-        @for (category of categories; track category.controlName) {
-            <label for="{{category.label}}">{{category.description}} </label>
-            <input id="{{category.id}}" type="number" formControlName="{{category.controlName}}">
-        }
-    </ng-container>
+  <ng-container>
+    @for (category of categories; track category.controlName) {
+    <label for="{{ category.label }}">{{ category.description }} </label>
+    <input
+      id="{{ category.id }}"
+      type="number"
+      formControlName="{{ category.controlName }}"
+    />
+    }
+  </ng-container>
 </form>
 
 <section>
-    <h2>Reward results for each card: </h2>
-    <ul>
-        @for (reward of rewards; track reward.cardName) {
-            <li>{{reward.cardName + ": " + reward.rewardValue}}</li>
-        }        
-    </ul>
+  <h2>Reward results for each card:</h2>
+  <ul>
+    @for (reward of rewards; track reward.cardName) {
+    <li>{{ reward.cardName + ": " + reward.rewardValue }}</li>
+    }
+  </ul>
 </section>
 
 <section>
-    <h2>The best card suggested: {{bestCard.cardName}}</h2>
-    <h2>Reward for the best card suggested: {{bestCard.rewardValue}}</h2>
+  <h2>The best card suggested: {{ bestCard.cardName }}</h2>
+  <h2>Reward for the best card suggested: {{ bestCard.rewardValue }}</h2>
 </section>
-
