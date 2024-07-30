@@ -1,16 +1,14 @@
 <h1>Consumer Category and Spend Froms</h1>
 
 <form class="category-spend-form" [formGroup]="categorySpendForm">
-  <ng-container>
-    @for (category of categories; track category.controlName) {
-    <label for="{{ category.label }}">{{ category.description }} </label>
-    <input
-      id="{{ category.id }}"
-      type="number"
-      formControlName="{{ category.controlName }}"
-    />
-    }
-  </ng-container>
+  @for (category of categories; track category.controlName) {
+  <label for="{{ category.label }}">{{ category.description }} </label>
+  <input
+    id="{{ category.id }}"
+    type="number"
+    formControlName="{{ category.controlName }}"
+  />
+  }
 </form>
 
 <section>
