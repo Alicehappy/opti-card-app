@@ -5,7 +5,7 @@ import { Category } from './category.interface';
 import { HttpClient } from '@angular/common/http';
 import { CategoryDescription } from './card-description.enum';
 import { CardName } from './card-name.enum';
-import { debounceTime } from 'rxjs';
+import { concatMap, debounceTime, map, mergeMap, tap } from 'rxjs';
 
 export interface RewardObj {
   cardName: string;
@@ -27,6 +27,7 @@ export class OptiCardComponent implements OnInit {
 
   private http = inject(HttpClient);
   post: any;
+  cardsData: any;
 
   ngOnInit(): void {
     this._categories = [
@@ -47,78 +48,89 @@ export class OptiCardComponent implements OnInit {
 
     this.categorySpendForm = this.formBuilder.group(this.formGroupConfig);
 
-    this.categorySpendForm.valueChanges
-      .pipe(debounceTime(300))
-      .subscribe((values) => {
-        this.rewards = [];
-        let rewardValue = 0;
+    this.cardsData = this.http.get('http://poto-tomato:3000/api/data');
 
-        for (let i = 0; i < this.post.cards.length; i++) {
-          //Case 1: Tangerine Money-Back MC will only give highest 3 categories 2% rewards, the rest categories are 0.5%
-          if (
-            this.post.cards[i]['name'] == CardName.TangerineMoneyBackMC ||
-            CardName.TangerineWorldMC
-          ) {
-            let objToSort = values;
-            let sortable: any[] = [];
+    const result = this.cardsData.pipe(
+      map((_val) => (this.post = _val)),
+      concatMap((_val) =>
+        this.categorySpendForm.valueChanges.pipe(debounceTime(300))
+      )
+    );
 
-            for (let obj in objToSort) {
-              sortable.push([obj, objToSort[obj]]);
-            }
+    result.subscribe((values: any) => {
+      console.log('subscribe data shown!!');
+      console.log(values);
+      console.log(this.post);
 
-            sortable.sort(function (a, b) {
-              return b[1] - a[1];
-            });
+      this.rewards = [];
+      let rewardValue = 0;
 
-            for (let i = 0; i < sortable.length; i++) {
-              if (i <= 2) {
-                rewardValue += sortable[i][1] * 0.02;
-              } else {
-                rewardValue += sortable[i][1] * 0.005;
-              }
-            }
+      for (let i = 0; i < this.post.cards.length; i++) {
+        //Case 1: Tangerine Money-Back MC will only give highest 3 categories 2% rewards, the rest categories are 0.5%
+        if (
+          this.post.cards[i]['name'] == CardName.TangerineMoneyBackMC ||
+          CardName.TangerineWorldMC
+        ) {
+          let objToSort = values;
+          let sortable: any[] = [];
+
+          for (let obj in objToSort) {
+            sortable.push([obj, objToSort[obj]]);
           }
 
-          // TODO: Many cards first $2500 in groceries give 4%, the rest if other, eg. 1%
-          else {
-            rewardValue =
-              this.post.cards[i]['drugStore'] * 0.01 * values['drugStore'] +
-              this.post.cards[i]['entertainment'] *
-                0.01 *
-                values['entertainment'] +
-              this.post.cards[i]['furniture'] * 0.01 * values['furniture'] +
-              this.post.cards[i]['gas'] * 0.01 * values['gas'] +
-              this.post.cards[i]['groceries'] * 0.01 * values['groceries'] +
-              this.post.cards[i]['homeImprovement'] *
-                0.01 *
-                values['homeImprovement'] +
-              this.post.cards[i]['hotel'] * 0.01 * values['hotel'] +
-              this.post.cards[i]['other'] * 0.01 * values['other'] +
-              this.post.cards[i]['parking'] * 0.01 * values['parking'] +
-              this.post.cards[i]['recurringBills'] *
-                0.01 *
-                values['recurringBills'] +
-              this.post.cards[i]['restaurants'] * 0.01 * values['restaurants'] +
-              this.post.cards[i]['streaming'] * 0.01 * values['streaming'] +
-              this.post.cards[i]['travel'] * 0.01 * values['travel'] -
-              this.post.cards[i]['annualFee'];
+          sortable.sort(function (a, b) {
+            return b[1] - a[1];
+          });
+
+          for (let i = 0; i < sortable.length; i++) {
+            if (i <= 2) {
+              rewardValue += sortable[i][1] * 0.02;
+            } else {
+              rewardValue += sortable[i][1] * 0.005;
+            }
           }
-
-          let rewardObj = {
-            cardName: this.post.cards[i]['name'],
-            rewardValue: rewardValue,
-          };
-
-          this.rewards.push(rewardObj);
         }
 
-        this.bestCard = this.rewards.reduce(
-          (max, item) => (item.rewardValue > max.rewardValue ? item : max),
-          this.rewards[0]
-        );
+        // TODO: Many cards first $2500 in groceries give 4%, the rest if other, eg. 1%
+        else {
+          rewardValue =
+            this.post.cards[i]['drugStore'] * 0.01 * values['drugStore'] +
+            this.post.cards[i]['entertainment'] *
+              0.01 *
+              values['entertainment'] +
+            this.post.cards[i]['furniture'] * 0.01 * values['furniture'] +
+            this.post.cards[i]['gas'] * 0.01 * values['gas'] +
+            this.post.cards[i]['groceries'] * 0.01 * values['groceries'] +
+            this.post.cards[i]['homeImprovement'] *
+              0.01 *
+              values['homeImprovement'] +
+            this.post.cards[i]['hotel'] * 0.01 * values['hotel'] +
+            this.post.cards[i]['other'] * 0.01 * values['other'] +
+            this.post.cards[i]['parking'] * 0.01 * values['parking'] +
+            this.post.cards[i]['recurringBills'] *
+              0.01 *
+              values['recurringBills'] +
+            this.post.cards[i]['restaurants'] * 0.01 * values['restaurants'] +
+            this.post.cards[i]['streaming'] * 0.01 * values['streaming'] +
+            this.post.cards[i]['travel'] * 0.01 * values['travel'] -
+            this.post.cards[i]['annualFee'];
+        }
 
-        return this.rewards;
-      });
+        let rewardObj = {
+          cardName: this.post.cards[i]['name'],
+          rewardValue: rewardValue,
+        };
+
+        this.rewards.push(rewardObj);
+      }
+
+      this.bestCard = this.rewards.reduce(
+        (max, item) => (item.rewardValue > max.rewardValue ? item : max),
+        this.rewards[0]
+      );
+
+      return this.rewards;
+    });
   }
 
   public get categories() {
@@ -169,9 +181,5 @@ export class OptiCardComponent implements OnInit {
     return _formGroupConfig;
   }
 
-  constructor(private formBuilder: FormBuilder) {
-    this.http.get('http://poto-tomato:3000/api/data').subscribe((data) => {
-      this.post = data;
-    });
-  }
+  constructor(private formBuilder: FormBuilder) {}
 }
