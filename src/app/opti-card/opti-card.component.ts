@@ -95,38 +95,108 @@ export class OptiCardComponent implements OnInit, OnDestroy {
         //Case 2: Scotia Momentum VI, Up to 25000 for both the 4% and the 2%; not parking
         else if (this.post.cards[i]['name'] == CardName.ScotiaMomentumVI) {
           const card = this.post.cards[i];
+
+          //TODO: suggestions for backend API: Add categories to simplify the code, so the below code could be used using for loop.
+
           //drugStore
           rewardValue += ScotiaMomentumVICalc(
             card['drugStore'],
             values['drugStore'],
-            card['others']
+            card['other']
           );
 
           //entertainment
+          rewardValue += ScotiaMomentumVICalc(
+            card['entertainment'],
+            values['entertainment'],
+            card['other']
+          );
 
           // furniture
+          rewardValue += ScotiaMomentumVICalc(
+            card['furniture'],
+            values['furniture'],
+            card['other']
+          );
 
           //gas
+          rewardValue += ScotiaMomentumVICalc(
+            card['gas'],
+            values['gas'],
+            card['other']
+          );
 
           //groceries
+          rewardValue += ScotiaMomentumVICalc(
+            card['groceries'],
+            values['groceries'],
+            card['other']
+          );
 
           //homeImprovement
+          rewardValue += ScotiaMomentumVICalc(
+            card['homeImprovement'],
+            values['homeImprovement'],
+            card['other']
+          );
 
           //hotel
+          rewardValue += ScotiaMomentumVICalc(
+            card['hotel'],
+            values['hotel'],
+            card['other']
+          );
 
           //parking
+          rewardValue += ScotiaMomentumVICalc(
+            card['parking'],
+            values['parking'],
+            card['other']
+          );
 
           //recurringBills
+          rewardValue += ScotiaMomentumVICalc(
+            card['recurringBills'],
+            values['recurringBills'],
+            card['other']
+          );
 
           //restaurants
+          rewardValue += ScotiaMomentumVICalc(
+            card['restaurants'],
+            values['restaurants'],
+            card['other']
+          );
 
           //streaming
+          rewardValue += ScotiaMomentumVICalc(
+            card['streaming'],
+            values['streaming'],
+            card['other']
+          );
 
           //travel
+          rewardValue += ScotiaMomentumVICalc(
+            card['travel'],
+            values['travel'],
+            card['others']
+          );
+
+          //other
+          rewardValue += ScotiaMomentumVICalc(
+            card['other'],
+            values['other'],
+            card['other']
+          );
+
+          rewardValue = rewardValue - card['annualFee'];
         }
 
         //Case 3: Scotia Momentum V, Up to 25000 for the 2%;
         else if (this.post.cards[i]['name'] == CardName.ScotiaMomentumV) {
+
+          //TODO: similar idea as ScotiaMomentumVI, but waiting for the api change to have a loop.
+
         } else {
           rewardValue = regularCalculation(this.post.cards[i]);
         }
@@ -150,6 +220,24 @@ export class OptiCardComponent implements OnInit, OnDestroy {
         otherCategory: number
       ) {
         if (category * 0.01 === 0.04 || 0.02) {
+          if (value > 25000) {
+            rewardValue += (value - 25000) * otherCategory * 0.01;
+          } else {
+            rewardValue += value * category * 0.01;
+          }
+        } else {
+          rewardValue += value * category * 0.01;
+        }
+
+        return rewardValue;
+      }
+
+      function ScotiaMomentumVCalc(
+        category: number,
+        value: number,
+        otherCategory: number
+      ) {
+        if (category * 0.01 === 0.02) {
           if (value > 25000) {
             rewardValue += (value - 25000) * otherCategory * 0.01;
           } else {
