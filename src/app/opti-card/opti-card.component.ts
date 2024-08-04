@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { Category } from './category.interface';
@@ -19,7 +19,7 @@ export interface RewardObj {
   styleUrl: './opti-card.component.scss',
   imports: [ReactiveFormsModule, CommonModule],
 })
-export class OptiCardComponent implements OnInit {
+export class OptiCardComponent implements OnInit, OnDestroy {
   public categorySpendForm: FormGroup = this.formBuilder.group({});
   private _categories: Array<string> = [];
   public rewards: Array<RewardObj> = [];
@@ -28,6 +28,7 @@ export class OptiCardComponent implements OnInit {
   private http = inject(HttpClient);
   post: any;
   cardsData: any;
+  result:any;
 
   ngOnInit(): void {
     this._categories = [
@@ -50,14 +51,14 @@ export class OptiCardComponent implements OnInit {
 
     this.cardsData = this.http.get('http://poto-tomato:3000/api/data');
 
-    const result = this.cardsData.pipe(
+    this.result = this.cardsData.pipe(
       map((_val) => (this.post = _val)),
       concatMap((_val) =>
         this.categorySpendForm.valueChanges.pipe(debounceTime(300))
       )
     );
 
-    result.subscribe((values: any) => {
+    this.result.subscribe((values: any) => {
       console.log('subscribe data shown!!');
       console.log(values);
       console.log(this.post);
@@ -182,4 +183,9 @@ export class OptiCardComponent implements OnInit {
   }
 
   constructor(private formBuilder: FormBuilder) {}
+
+
+  ngOnDestroy() {
+    this.result.unsubscribe();
+  }
 }
