@@ -92,7 +92,58 @@ export class OptiCardComponent implements OnInit, OnDestroy {
           }
         }
 
-        // TODO: Many cards first $2500 in groceries give 4%, the rest if other, eg. 1%
+        //Case 2: Scotia Momentum VI, Up to 25000 for both the 4% and the 2%; not parking
+        else if (this.post.cards[i]['name'] == CardName.ScotiaMomentumVI) {
+          const card = this.post.cards[i]
+          //drugStore 
+          rewardValue += ScotiaMomentumVICalc(card['drugStore'], values['drugStore'], card['others']);
+          // if(card['drugStore'] * 0.01 === 0.04 || 0.02) {
+          //   if(values['drugStore'] > 25000) {
+          //     rewardValue += (values['drugStore'] - 25000) * card['others'] * 0.01;
+          //   } else {
+          //     rewardValue += values['drugStore'] * card['drugStore'] * 0.01
+          //   } 
+          // } else {
+          //   rewardValue += values['drugStore'] * card['drugStore'] * 0.01
+          // }
+
+          //entertainment
+
+
+          // furniture
+
+
+          //gas
+
+          //groceries
+
+
+          //homeImprovement
+
+
+          //hotel
+
+          //parking
+
+          //recurringBills
+
+
+          //restaurants
+
+
+          //streaming
+
+          //travel
+
+
+        }
+
+
+        //Case 3: Scotia Momentum V, Up to 25000 for the 2%;
+        else if(this.post.cards[i]['name'] == CardName.ScotiaMomentumV) {
+
+        }
+
         else {
           rewardValue = regularCalculation(this.post.cards[i]);
         }
@@ -109,6 +160,23 @@ export class OptiCardComponent implements OnInit, OnDestroy {
         (max, item) => (item.rewardValue > max.rewardValue ? item : max),
         this.rewards[0]
       );
+
+
+      function ScotiaMomentumVICalc(category: number, value: number, otherCategory: number) {
+
+        if(category * 0.01 === 0.04 || 0.02) {
+          if(value > 25000) {
+             rewardValue += (value - 25000) * otherCategory * 0.01;
+          } else {
+            rewardValue += value * category * 0.01
+          } 
+        } else {
+          rewardValue += value * category * 0.01
+        }
+
+        return rewardValue;
+
+      }
 
       function regularCalculation(post: { [x: string]: number }) {
         return (
