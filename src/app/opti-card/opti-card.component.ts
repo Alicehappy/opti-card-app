@@ -95,26 +95,6 @@ export class OptiCardComponent implements OnInit, OnDestroy {
         // TODO: Many cards first $2500 in groceries give 4%, the rest if other, eg. 1%
         else {
           rewardValue = regularCalculation(this.post.cards[i]);
-          // this.post.cards[i]['drugStore'] * 0.01 * values['drugStore'] +
-          // this.post.cards[i]['entertainment'] *
-          //   0.01 *
-          //   values['entertainment'] +
-          // this.post.cards[i]['furniture'] * 0.01 * values['furniture'] +
-          // this.post.cards[i]['gas'] * 0.01 * values['gas'] +
-          // this.post.cards[i]['groceries'] * 0.01 * values['groceries'] +
-          // this.post.cards[i]['homeImprovement'] *
-          //   0.01 *
-          //   values['homeImprovement'] +
-          // this.post.cards[i]['hotel'] * 0.01 * values['hotel'] +
-          // this.post.cards[i]['other'] * 0.01 * values['other'] +
-          // this.post.cards[i]['parking'] * 0.01 * values['parking'] +
-          // this.post.cards[i]['recurringBills'] *
-          //   0.01 *
-          //   values['recurringBills'] +
-          // this.post.cards[i]['restaurants'] * 0.01 * values['restaurants'] +
-          // this.post.cards[i]['streaming'] * 0.01 * values['streaming'] +
-          // this.post.cards[i]['travel'] * 0.01 * values['travel'] -
-          // this.post.cards[i]['annualFee'];
         }
 
         let rewardObj = {
