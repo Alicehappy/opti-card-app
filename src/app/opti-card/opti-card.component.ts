@@ -28,7 +28,7 @@ export class OptiCardComponent implements OnInit, OnDestroy {
   private http = inject(HttpClient);
   post: any;
   cardsData: any;
-  result:any;
+  result: any;
 
   ngOnInit(): void {
     this._categories = [
@@ -94,27 +94,27 @@ export class OptiCardComponent implements OnInit, OnDestroy {
 
         // TODO: Many cards first $2500 in groceries give 4%, the rest if other, eg. 1%
         else {
-          rewardValue =
-            this.post.cards[i]['drugStore'] * 0.01 * values['drugStore'] +
-            this.post.cards[i]['entertainment'] *
-              0.01 *
-              values['entertainment'] +
-            this.post.cards[i]['furniture'] * 0.01 * values['furniture'] +
-            this.post.cards[i]['gas'] * 0.01 * values['gas'] +
-            this.post.cards[i]['groceries'] * 0.01 * values['groceries'] +
-            this.post.cards[i]['homeImprovement'] *
-              0.01 *
-              values['homeImprovement'] +
-            this.post.cards[i]['hotel'] * 0.01 * values['hotel'] +
-            this.post.cards[i]['other'] * 0.01 * values['other'] +
-            this.post.cards[i]['parking'] * 0.01 * values['parking'] +
-            this.post.cards[i]['recurringBills'] *
-              0.01 *
-              values['recurringBills'] +
-            this.post.cards[i]['restaurants'] * 0.01 * values['restaurants'] +
-            this.post.cards[i]['streaming'] * 0.01 * values['streaming'] +
-            this.post.cards[i]['travel'] * 0.01 * values['travel'] -
-            this.post.cards[i]['annualFee'];
+          rewardValue = regularCalculation(this.post.cards[i]);
+          // this.post.cards[i]['drugStore'] * 0.01 * values['drugStore'] +
+          // this.post.cards[i]['entertainment'] *
+          //   0.01 *
+          //   values['entertainment'] +
+          // this.post.cards[i]['furniture'] * 0.01 * values['furniture'] +
+          // this.post.cards[i]['gas'] * 0.01 * values['gas'] +
+          // this.post.cards[i]['groceries'] * 0.01 * values['groceries'] +
+          // this.post.cards[i]['homeImprovement'] *
+          //   0.01 *
+          //   values['homeImprovement'] +
+          // this.post.cards[i]['hotel'] * 0.01 * values['hotel'] +
+          // this.post.cards[i]['other'] * 0.01 * values['other'] +
+          // this.post.cards[i]['parking'] * 0.01 * values['parking'] +
+          // this.post.cards[i]['recurringBills'] *
+          //   0.01 *
+          //   values['recurringBills'] +
+          // this.post.cards[i]['restaurants'] * 0.01 * values['restaurants'] +
+          // this.post.cards[i]['streaming'] * 0.01 * values['streaming'] +
+          // this.post.cards[i]['travel'] * 0.01 * values['travel'] -
+          // this.post.cards[i]['annualFee'];
         }
 
         let rewardObj = {
@@ -129,6 +129,25 @@ export class OptiCardComponent implements OnInit, OnDestroy {
         (max, item) => (item.rewardValue > max.rewardValue ? item : max),
         this.rewards[0]
       );
+
+      function regularCalculation(post: { [x: string]: number }) {
+        return (
+          post['drugStore'] * 0.01 * values['drugStore'] +
+          post['entertainment'] * 0.01 * values['entertainment'] +
+          post['furniture'] * 0.01 * values['furniture'] +
+          post['gas'] * 0.01 * values['gas'] +
+          post['groceries'] * 0.01 * values['groceries'] +
+          post['homeImprovement'] * 0.01 * values['homeImprovement'] +
+          post['hotel'] * 0.01 * values['hotel'] +
+          post['other'] * 0.01 * values['other'] +
+          post['parking'] * 0.01 * values['parking'] +
+          post['recurringBills'] * 0.01 * values['recurringBills'] +
+          post['restaurants'] * 0.01 * values['restaurants'] +
+          post['streaming'] * 0.01 * values['streaming'] +
+          post['travel'] * 0.01 * values['travel'] -
+          post['annualFee']
+        );
+      }
 
       return this.rewards;
     });
@@ -183,7 +202,6 @@ export class OptiCardComponent implements OnInit, OnDestroy {
   }
 
   constructor(private formBuilder: FormBuilder) {}
-
 
   ngOnDestroy() {
     this.result.unsubscribe();
